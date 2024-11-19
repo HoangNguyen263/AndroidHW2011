@@ -1,13 +1,14 @@
 package vn.edu.hust.studentman
 
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
-class MainActivity : AppCompatActivity(), DialogFragment.DialogListener {
+class MainActivity : AppCompatActivity(), StudentDialogFragment.DialogListener {
   lateinit var add: Button
   lateinit var students: MutableList<StudentModel>
   lateinit var studentAdapter: StudentAdapter
@@ -18,7 +19,25 @@ class MainActivity : AppCompatActivity(), DialogFragment.DialogListener {
 
     students = mutableListOf(
       StudentModel("Nguyễn Văn An", "SV001"),
-      // ... other students
+      StudentModel("Trần Thị Bảo", "SV002"),
+      StudentModel("Lê Hoàng Cường", "SV003"),
+      StudentModel("Phạm Thị Dung", "SV004"),
+      StudentModel("Đỗ Minh Đức", "SV005"),
+      StudentModel("Vũ Thị Hoa", "SV006"),
+      StudentModel("Hoàng Văn Hải", "SV007"),
+//      StudentModel("Bùi Thị Hạnh", "SV008"),
+//      StudentModel("Đinh Văn Hùng", "SV009"),
+//      StudentModel("Nguyễn Thị Linh", "SV010"),
+//      StudentModel("Phạm Văn Long", "SV011"),
+//      StudentModel("Trần Thị Mai", "SV012"),
+//      StudentModel("Lê Thị Ngọc", "SV013"),
+//      StudentModel("Vũ Văn Nam", "SV014"),
+//      StudentModel("Hoàng Thị Phương", "SV015"),
+//      StudentModel("Đỗ Văn Quân", "SV016"),
+//      StudentModel("Nguyễn Thị Thu", "SV017"),
+//      StudentModel("Trần Văn Tài", "SV018"),
+//      StudentModel("Phạm Thị Tuyết", "SV019"),
+//      StudentModel("Lê Văn Vũ", "SV020")
     )
 
     add = findViewById(R.id.btn_add_new)
@@ -34,15 +53,21 @@ class MainActivity : AppCompatActivity(), DialogFragment.DialogListener {
     }
   }
 
-  override fun onDialogPositiveClick(userName: String, userId: String) {
+  override fun onDialogPositiveClick(userName: String, userId: String, clickEdit : Boolean, position : Int) {
     // Handle the data received from the dialog
-    val newStudent = StudentModel(userName, userId)
-    students.add(newStudent)
-    studentAdapter.notifyItemInserted(students.size - 1)
+    if (clickEdit == false) {
+      val newStudent = StudentModel(userName, userId)
+      students.add(newStudent)
+      studentAdapter.notifyItemInserted(students.size - 1)
+    }  else {
+        students[position] = StudentModel(userName, userId)
+        studentAdapter.notifyItemChanged(position)
+    }
+
   }
 
   private fun showAlertDialog() {
-    val dialog = DialogFragment()
+    val dialog = StudentDialogFragment()
     val fragmentManager: FragmentManager = supportFragmentManager
     dialog.show(fragmentManager, "Enter your information")
   }

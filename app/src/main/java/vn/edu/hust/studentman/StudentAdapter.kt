@@ -1,12 +1,14 @@
 package vn.edu.hust.studentman
 
 import android.app.AlertDialog
+import android.app.Dialog
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
@@ -27,15 +29,16 @@ class StudentAdapter(val students: MutableList<StudentModel>, val fragmentManage
   override fun getItemCount(): Int = students.size
 
   override fun onBindViewHolder(holder: StudentViewHolder, position: Int) {
-    val student = students[position]
 
+    val student = students[position]
     holder.textStudentName.text = student.studentName
     holder.textStudentId.text = student.studentId
 
+
     holder.imageEdit.setOnClickListener {
-      val dialog = DialogFragment.newInstance(student.studentName, student.studentId)
-      dialog.show(fragmentManager, "Edit Student")
-      Log.d("StudentAdapter", "Dialog should be shown")
+      val dialog = StudentDialogFragment.newInstance(student.studentName, student.studentId,true,position)
+      dialog.show(fragmentManager, "EditStudentDialog")
+      Log.d("Edit Button", "Edit Button Clicked $position")
     }
 
     holder.imageRemove.setOnClickListener {
@@ -57,4 +60,6 @@ class StudentAdapter(val students: MutableList<StudentModel>, val fragmentManage
         .show()
     }
   }
+
+
 }
